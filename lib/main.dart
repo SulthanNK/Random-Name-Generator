@@ -3,32 +3,44 @@ import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
 
-class RandomWords extends StatefulWidget {
+// #docregion MyApp
+class MyApp extends StatelessWidget {
+  // #docregion build
   @override
-  _RandomWordsState createState() => _RandomWordsState();
-}
-
-class _RandomWordsState extends State<RandomWords> {
-  final List<WordPair> _suggestions = <WordPair>[];
-  final _saved = Set<WordPair>();
-  final TextStyle _biggerFont = const TextStyle(fontSize: 18);
-
-  Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemBuilder: (BuildContext _context, int i) {
-          if (i.isOdd) {
-            return Divider();
-          }
-          final int index = i ~/ 2;
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10));
-          }
-          return _buildRow(_suggestions[index]);
-        }
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Startup Name Generator',
+      home: RandomWords(),
     );
   }
+// #enddocregion build
+}
+// #enddocregion MyApp
 
+// #docregion RWS-var
+class _RandomWordsState extends State<RandomWords> {
+  final _suggestions = <WordPair>[];
+  final _saved = <WordPair>{};
+  final _biggerFont = TextStyle(fontSize: 18.0);
+  // #enddocregion RWS-var
+
+  // #docregion _buildSuggestions
+  Widget _buildSuggestions() {
+    return ListView.builder(
+        padding: EdgeInsets.all(16.0),
+        itemBuilder: /*1*/ (context, i) {
+          if (i.isOdd) return Divider(); /*2*/
+
+          final index = i ~/ 2; /*3*/
+          if (index >= _suggestions.length) {
+            _suggestions.addAll(generateWordPairs().take(10)); /*4*/
+          }
+          return _buildRow(_suggestions[index]);
+        });
+  }
+  // #enddocregion _buildSuggestions
+
+  // #docregion _buildRow
   Widget _buildRow(WordPair pair) {
     final alreadySaved = _saved.contains(pair);
     return ListTile(
@@ -51,24 +63,24 @@ class _RandomWordsState extends State<RandomWords> {
       },
     );
   }
+  // #enddocregion _buildRow
 
+  // #docregion RWS-build
   @override
   Widget build(BuildContext context) {
-    return Scaffold (
+    return Scaffold(
       appBar: AppBar(
         title: Text('Startup Name Generator'),
       ),
       body: _buildSuggestions(),
     );
   }
+// #enddocregion RWS-build
+// #docregion RWS-var
 }
+// #enddocregion RWS-var
 
-class MyApp extends StatelessWidget {
+class RandomWords extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Startup Name Generator',
-      home: RandomWords(),
-    );
-  }
+  State<RandomWords> createState() => _RandomWordsState();
 }
